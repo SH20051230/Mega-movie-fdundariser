@@ -10,7 +10,6 @@ def check_name(question):
         else:
          return answer
 
-#Age can't be blank
 
 
 #Did the user used the proggame before, if no give them the instructions
