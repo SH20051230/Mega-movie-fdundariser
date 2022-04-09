@@ -1,3 +1,6 @@
+
+import pandas
+
 names = ["Rangi", "Manaia", "Talia", "Arhri", "Fetu"]
 #Create sepreate list for each snack type
 popcorn = []

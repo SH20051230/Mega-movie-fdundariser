@@ -50,7 +50,7 @@ print()
 #Print details
 movie_frames = pandas.DataFrame(movie_data_dict)
 movie_frames = movie_frames.set_index("Name")  #change reference to names rather than an atual number
-print(movie_frames)
+
 
 
 
