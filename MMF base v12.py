@@ -1,4 +1,11 @@
-#import statement
+# Based on MMF_base_v11
+# Move the ticket counting routine into its own function - so that it can be called each time a
+# ticket is sold as well as at the end of the summary print. Format currency correctly using a function
+# (just before the main routine) and, just above the frames, rearrange the snack, ticket and total profit
+# figures using the currency function
+
+
+# important statement
 import re
 import pandas
 #Functions
@@ -120,6 +127,23 @@ def check_valid_payment_method():
                             ["cash", "ca", "money", "notes", "coins", "c", "3"]]
     payment_method = get_choice(ask_payment_method, valid_payment_method)
     return payment_method
+
+def ticket_counting(tickets_sold, maximum):
+
+    if ticket_count < Max_tickets:
+        if ticket_count > 1:
+         print(f"you have sold {ticket_count} tickets")
+        else:
+         print("one ticket had now been sold")
+        if Max_tickets - ticket_count > 1:
+         print(f"{Max_tickets - ticket_count} tickets are still avalible")
+        else:
+            print("There is only one ticket left!!!")
+    else:
+        print("YOu have sold all avalible tickets!!!")
+
+def currency(number):
+    return f"${number:,.2f}"
 # main routine
 
 # set up dictionarys
@@ -251,6 +275,8 @@ while name != "X" and ticket_count < Max_tickets:
 
             surcharge_mult_list.append(surcharge_mutiplier)
 
+            ticket_counting(ticket_count, Max_tickets)
+
 
 
             #Get payment method
@@ -259,17 +285,6 @@ while name != "X" and ticket_count < Max_tickets:
 
 
 
-if ticket_count < Max_tickets:
-    if ticket_count > 1:
-     print(f"you have sold {ticket_count} tickets")
-    else:
-     print("one ticket had now been sold")
-    if Max_tickets - ticket_count > 1:
-     print(f"{Max_tickets - ticket_count} tickets are still avalible")
-    else:
-        print("There is only one ticket left!!!")
-else:
-    print("YOu have sold all avalible tickets!!!")
 
 #Print details
 print()
@@ -302,14 +317,15 @@ for item in snack_lists:
 #Get snack total from panda
 snack_total = movie_frames["Snack Cost"].sum()
 snack_profit = snack_total * snack_profit_margin
-summary_data.append(snack_profit)
 
-# Get ticket profit and added it to the list
-summary_data.append(ticket_profit)
 
 # Work out total profit and add to list
 total_profit = snack_profit + ticket_profit
-summary_data.append(total_profit)
+# Format profit figures and add to summary list
+currency_amounts = [snack_profit, ticket_profit, total_profit]
+for amount in currency_amounts:
+    amount = currency(amount)
+    summary_data.append(amount)
 
 # create summary frame
 summary_frames = pandas.DataFrame(summary_data_dict)
@@ -337,4 +353,7 @@ print()
 print("Snack/profit summary")
 print()
 print(summary_frames)
+
+# Remaining tickets
+ticket_counting(ticket_count, Max_tickets)
 # output data to text files

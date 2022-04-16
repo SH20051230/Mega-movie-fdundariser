@@ -1,8 +1,27 @@
-#import statement
+# Based on MMF_base_v11
+
+
+# important statement
 import re
 import pandas
-#Functions
+# Functions
 
+
+def split_orders(choice):
+
+    # To test if an item starts with a number
+    number_regex = "^[1-9]"
+    # if an item does have number sepreate it with the rest
+    if re.match(number_regex, choice):
+        quantity_required = int(choice[0])
+        snack_name = choice[1:]
+    # if has no number assume it's one
+    else:
+        quantity_required = 1
+        snack_name = choice
+    # Removing space
+    snack_name = snack_name.strip()
+    return quantity_required, snack_name
 
 
 def get_choice(choice, valid_choice):
@@ -13,30 +32,22 @@ def get_choice(choice, valid_choice):
             return choice
     print(choice_error)
 
-def split_orders(choice):
 
-    #To test if an item starts with a number
-    number_regex = "^[1-9]"
-    #if an item does have number sepreate it with the rest
-    if re.match(number_regex, choice):
-        quantity_required = int(choice[0])
-        snack_name = choice[1:]
-    #iF has no number assume it's one
-    else:
-        quantity_required = 1
-        snack_name = choice
-    #Removing space
-    snack_name = snack_name.strip()
-    return quantity_required, snack_name
+
 
 def collate_orders():
-    Valid_snacks = [["Popcorn", "p", "corn", "(1"], ["M&M", "mms", "m", "(2"],
-                ["Pita Chips", "chips", "pc", "pita", "c", "(3"], ["Water", "w", "(4"],
-                ["Orange Juice", "oj", "(5"], ["x", "exit", "(6"]]
-#valid options
-    valid_yes_no_answer = [["y", "yes"], ["n", "no"]]
+    Valid_snacks = [["Popcorn", "p", "corn", "(1"],
+                    ["M&M", "mms", "m", "(2"],
+                    ["Pita Chips", "chips", "pc", "pita", "c", "(3"],
+                    ["Water", "w", "(4"],
+                    ["Orange Juice", "oj", "(5"],
+                    ["x", "exit", "(6"]]
+# valid options
+
     snack_order = []
+
     max_number_of_snacks = 4
+
     option = ""
     while option != "X":
         snack = input("what snacks do you want - qty then item"
@@ -44,13 +55,13 @@ def collate_orders():
         snack = split_orders(snack)
         quantity = snack[0]
         if quantity > max_number_of_snacks:
-            print("Sorry the max anount you can order is 4")
+            print("Sorry the max amount you can order is 4")
         else:
             snack = snack[1]
             option = get_choice(snack, Valid_snacks)
             if option == "X":
                 break
-            elif option is not None:   #Filters out the invalid choices
+            elif option is not None:   # Filters out the invalid choices
                 snack_order.append([quantity, option])
     return snack_order
 
@@ -64,14 +75,16 @@ def clac_tickets_price(ticket_age):
     Retired_price = 6.5
 
     if ticket_age in Children_age:
-     price = child_price
+        price = child_price
     elif ticket_age in Standard_age:
-     price = standard_price
+        price = standard_price
     else:
-     price = Retired_price
+        price = Retired_price
 
     return price
-#The ticket holder's name can't be blank
+# The ticket holder's name can't be blank
+
+
 def number_checker(question):
     number = ""
     while not number:
@@ -82,7 +95,7 @@ def number_checker(question):
             print("Please enter an integer(a whole number not a decimal")
 
 
-#Interger checker(for age)
+# Interger checker(for age)
 def not_blank(question):
     valid = ""
     while not valid:
@@ -95,15 +108,15 @@ def not_blank(question):
             return response
 
 
-
 def check_max_tickets(maximum, sold):
     if maximum - sold > 1:
         print(f"There are {maximum - sold} tickets left")
     else:
         print("You have only one ticket left")
 
+
 def check_valid_age(max_age, min_age):
-    #confirm again the age, just to fix the error
+    # confirm again the age, just to fix the error
     valid_age = number_checker(f"Please confirm {name}'s age: ")
     if valid_age < min_age:
         print(f"sorry {name} is too young for this movie")
@@ -113,6 +126,7 @@ def check_valid_age(max_age, min_age):
             valid_age = number_checker(f"at {valid_age} {name} is very old, please re-enter {name}'s age")
         return valid_age
 
+
 def check_valid_payment_method():
     ask_payment_method = input("how do you want to pay: ").lower()
     valid_payment_method = [["credit card", "card", "credit", "cc", "cr", "1"],
@@ -120,6 +134,54 @@ def check_valid_payment_method():
                             ["cash", "ca", "money", "notes", "coins", "c", "3"]]
     payment_method = get_choice(ask_payment_method, valid_payment_method)
     return payment_method
+
+
+def ticket_counting(tickets_sold, maximum):
+
+    if ticket_count < Max_tickets:
+        if ticket_count > 1:
+         print(f"you have sold {ticket_count} tickets")
+        else:
+         print("one ticket had now been sold")
+        if Max_tickets - ticket_count > 1:
+         print(f"{Max_tickets - ticket_count} tickets are still avalible")
+        else:
+            print("There is only one ticket left!!!")
+    else:
+        print("YOu have sold all avalible tickets!!!")
+
+
+def currency(number):
+    return f"${number:,.2f}"
+
+
+def show_instructions(valid_responses):
+    instructions = ""
+    while not instructions:
+        instructions = not_blank("would you like to read the instructions?: ").lower
+        instructions = (get_choice(instructions, valid_responses))
+    if instructions == "Y":
+        print("\n*************************************************************\n"
+              "\n\t\t**** Mega movie Fundraiser Instructions ***\n"
+              "\n you will be shown how many tickets are still avalible\n"
+              "for sale and asked for the first ticket-purchaser's name.\n"
+              "you will then be asked to input the ticket-purchaser's age.\n"
+              "'nThis is because:\n"
+              "\t-the minimum age for entry is 12; and\n"
+              "\t-there is a standard price for adults; but\n"
+              "\t-different prices for students and retired people.\n"
+              "and once these are entered you will then need to provide a\n"
+              "valid method of payment.\n"
+              "\nThis process keeps repearting until either all tickets are\n"
+              "sold or you choose to exit the program.\n"
+              "\n0n exit, a summary of sales and profits will be printed to\n"
+              "the screen. Full details of all sales and profits are also \n"
+              "output to .csv files. These can be found in the same\n"
+              "directory in which the program is stored.\n"
+              "\n*************************************************************\n")
+    print("program launches...")
+
+
 # main routine
 
 # set up dictionarys
@@ -180,17 +242,22 @@ snack_profit_margin = .2
 Surcharge_rate = .05
 min_age = 12
 max_age = 110
-Max_tickets = 5
+Max_tickets = 150
 ticket_cost = 5.00
 name = ""
 ticket_count = 0
 ticket_profit = 0
 surcharge = 0
 
+# Ask the user if they have used the program before
+# And show instructions if neccery
+print("Welcome to Mega movie")
+valid_yes_no = [["y", "yes"], ["n", "no"]]
+show_instructions(valid_yes_no)
 
 while name != "X" and ticket_count < Max_tickets:
      check_max_tickets(Max_tickets, ticket_count)
-     #Get details and name
+     # Get details and name
      name = not_blank("Enter the name of the ticket holder: ").title()
      if name == "X":
         break
@@ -251,6 +318,8 @@ while name != "X" and ticket_count < Max_tickets:
 
             surcharge_mult_list.append(surcharge_mutiplier)
 
+            ticket_counting(ticket_count, Max_tickets)
+
 
 
             #Get payment method
@@ -259,17 +328,6 @@ while name != "X" and ticket_count < Max_tickets:
 
 
 
-if ticket_count < Max_tickets:
-    if ticket_count > 1:
-     print(f"you have sold {ticket_count} tickets")
-    else:
-     print("one ticket had now been sold")
-    if Max_tickets - ticket_count > 1:
-     print(f"{Max_tickets - ticket_count} tickets are still avalible")
-    else:
-        print("There is only one ticket left!!!")
-else:
-    print("YOu have sold all avalible tickets!!!")
 
 #Print details
 print()
@@ -302,14 +360,15 @@ for item in snack_lists:
 #Get snack total from panda
 snack_total = movie_frames["Snack Cost"].sum()
 snack_profit = snack_total * snack_profit_margin
-summary_data.append(snack_profit)
 
-# Get ticket profit and added it to the list
-summary_data.append(ticket_profit)
 
 # Work out total profit and add to list
 total_profit = snack_profit + ticket_profit
-summary_data.append(total_profit)
+# Format profit figures and add to summary list
+currency_amounts = [snack_profit, ticket_profit, total_profit]
+for amount in currency_amounts:
+    amount = currency(amount)
+    summary_data.append(amount)
 
 # create summary frame
 summary_frames = pandas.DataFrame(summary_data_dict)
@@ -317,9 +376,18 @@ summary_frames = summary_frames.set_index("Item")
 
 # Force all coloumns to be printed
 pandas.set_option("display.max_columns", None)
+# Pre printing / export
+# Format currency values so they have $'s
 
-# display numbers to 2 decimal places
-pandas.set_option("precision", 2)
+currency_amounts = ["Ticket", "Snack Cost", "Sub Total", "Surcharge", "Total"]
+for amount in currency_amounts:
+    movie_frames[amount] = movie_frames[amount].apply(currency)
+    # This is a call to the currency() function above
+
+# Write each frame to seprate csv files
+movie_frames.to_csv("ticket_details.csv")
+summary_frames.to_csv("snack_summary.csv")
+
 
 print(movie_frames)
 print()
@@ -328,7 +396,7 @@ print()
 print()
 print("Ticket/snack Information sheet")
 #  Referes to an export file - functionality yet to be developed
-print("Note: for full details please see the excel file called zzz")
+print("Note: for full details please see the excel file called ticket_details.csv; and snack_summary.csv")
 print()
 print(movie_frames[["Ticket", "Snack Cost"], "Sub Total", "Surcharge", "Total"])
 print()
@@ -337,4 +405,7 @@ print()
 print("Snack/profit summary")
 print()
 print(summary_frames)
+
+# Remaining tickets
+ticket_counting(ticket_count, Max_tickets)
 # output data to text files
